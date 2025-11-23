@@ -1,0 +1,105 @@
+{
+  "site": {
+    "title": "AI Edu News",
+    "tagline": "Understanding AI and Education Trends with the Feynman Technique",
+    "description": "Latest AI/Education news for teachers and AI YouTubers, explained using the Feynman Technique."
+  },
+  "nav": {
+    "home": "Home",
+    "posts": "News",
+    "about": "About",
+    "newsletter": "Newsletter",
+    "admin": "Admin"
+  },
+  "buttons": {
+    "readMore": "Read More",
+    "subscribe": "Subscribe",
+    "unsubscribe": "Unsubscribe",
+    "generate": "Generate",
+    "publish": "Publish",
+    "edit": "Edit",
+    "delete": "Delete",
+    "save": "Save",
+    "cancel": "Cancel",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "select": "Select",
+    "selectAll": "Select All",
+    "deselectAll": "Deselect All"
+  },
+  "feynman": {
+    "title": "Feynman's Questions",
+    "subtitle": "What would Professor Richard Feynman ask?",
+    "questions": "Feynman's Questions",
+    "principle": "Fundamental Question",
+    "principleDesc": "Why does this work?",
+    "application": "Application Question",
+    "applicationDesc": "Where can we use this?",
+    "opposite": "Opposite Question",
+    "oppositeDesc": "What if it were the opposite?",
+    "reasoning": "Why Feynman would ask this"
+  },
+  "categories": {
+    "all": "All",
+    "ai": "AI",
+    "education": "Education",
+    "aiEducation": "AI+Education"
+  },
+  "countries": {
+    "kr": "Korea",
+    "us": "USA"
+  },
+  "sources": {
+    "reddit": "Reddit",
+    "twitter": "Twitter",
+    "techcrunch": "TechCrunch",
+    "edsurge": "EdSurge",
+    "aitimes": "AI Times KR",
+    "zdnet": "ZDNet Korea"
+  },
+  "newsletter": {
+    "title": "Newsletter Subscription",
+    "description": "Get curated AI education news every week",
+    "emailPlaceholder": "Enter your email address",
+    "subscribeSuccess": "Thank you for subscribing!",
+    "subscribeError": "An error occurred during subscription.",
+    "unsubscribeSuccess": "You have been unsubscribed.",
+    "frequency": "Frequency",
+    "weekly": "Weekly",
+    "biweekly": "Bi-weekly"
+  },
+  "admin": {
+    "dashboard": "Dashboard",
+    "todayNews": "Today's News",
+    "selectNews": "Select News",
+    "selectedCount": "{count} selected",
+    "generateFeynman": "Convert to Feynman Style",
+    "generating": "Generating...",
+    "generatedArticles": "Generated Articles",
+    "preview": "Preview",
+    "editor": "Editor",
+    "publishSettings": "Publish Settings",
+    "platforms": "Platforms",
+    "blog": "Blog",
+    "twitter": "Twitter",
+    "youtube": "YouTube Community",
+    "addToNewsletter": "Add to Newsletter"
+  },
+  "status": {
+    "pending": "Pending",
+    "processing": "Processing",
+    "completed": "Completed",
+    "failed": "Failed",
+    "published": "Published",
+    "draft": "Draft"
+  },
+  "messages": {
+    "loading": "Loading...",
+    "noData": "No data available",
+    "error": "An error occurred",
+    "success": "Success",
+    "confirmDelete": "Are you sure you want to delete?",
+    "confirmPublish": "Do you want to publish this news?"
+  }
+}

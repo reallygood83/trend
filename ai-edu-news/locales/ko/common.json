@@ -1,0 +1,105 @@
+{
+  "site": {
+    "title": "AI 교육 뉴스",
+    "tagline": "파인만 기법으로 쉽게 이해하는 AI와 교육 트렌드",
+    "description": "교사와 AI 유튜버를 위한 최신 AI/교육 뉴스를 파인만 기법으로 재해석합니다."
+  },
+  "nav": {
+    "home": "홈",
+    "posts": "뉴스",
+    "about": "소개",
+    "newsletter": "뉴스레터",
+    "admin": "관리자"
+  },
+  "buttons": {
+    "readMore": "더 보기",
+    "subscribe": "구독하기",
+    "unsubscribe": "구독 취소",
+    "generate": "생성하기",
+    "publish": "발행하기",
+    "edit": "편집",
+    "delete": "삭제",
+    "save": "저장",
+    "cancel": "취소",
+    "back": "뒤로",
+    "next": "다음",
+    "previous": "이전",
+    "select": "선택",
+    "selectAll": "전체 선택",
+    "deselectAll": "전체 해제"
+  },
+  "feynman": {
+    "title": "파인만 교수의 질문",
+    "subtitle": "리처드 파인만 교수라면 이렇게 질문할 거예요",
+    "questions": "파인만 교수의 질문",
+    "principle": "근본 원리 질문",
+    "principleDesc": "왜 이게 작동하는 거지?",
+    "application": "응용 질문",
+    "applicationDesc": "이걸 어디에 쓸 수 있을까?",
+    "opposite": "반대 질문",
+    "oppositeDesc": "만약 반대라면 어떻게 될까?",
+    "reasoning": "파인만이 이 질문을 한 이유"
+  },
+  "categories": {
+    "all": "전체",
+    "ai": "AI",
+    "education": "교육",
+    "aiEducation": "AI+교육"
+  },
+  "countries": {
+    "kr": "한국",
+    "us": "미국"
+  },
+  "sources": {
+    "reddit": "Reddit",
+    "twitter": "Twitter",
+    "techcrunch": "TechCrunch",
+    "edsurge": "EdSurge",
+    "aitimes": "AI타임스",
+    "zdnet": "ZDNet Korea"
+  },
+  "newsletter": {
+    "title": "뉴스레터 구독",
+    "description": "매주 엄선된 AI 교육 뉴스를 받아보세요",
+    "emailPlaceholder": "이메일 주소를 입력하세요",
+    "subscribeSuccess": "구독해주셔서 감사합니다!",
+    "subscribeError": "구독 중 오류가 발생했습니다.",
+    "unsubscribeSuccess": "구독이 취소되었습니다.",
+    "frequency": "발송 주기",
+    "weekly": "주간",
+    "biweekly": "격주"
+  },
+  "admin": {
+    "dashboard": "대시보드",
+    "todayNews": "오늘의 뉴스",
+    "selectNews": "뉴스 선택",
+    "selectedCount": "{count}개 선택됨",
+    "generateFeynman": "파인만 스타일로 변환",
+    "generating": "생성 중...",
+    "generatedArticles": "생성된 기사",
+    "preview": "미리보기",
+    "editor": "편집기",
+    "publishSettings": "발행 설정",
+    "platforms": "플랫폼",
+    "blog": "블로그",
+    "twitter": "트위터",
+    "youtube": "유튜브 커뮤니티",
+    "addToNewsletter": "뉴스레터에 추가"
+  },
+  "status": {
+    "pending": "대기중",
+    "processing": "처리중",
+    "completed": "완료",
+    "failed": "실패",
+    "published": "발행됨",
+    "draft": "초안"
+  },
+  "messages": {
+    "loading": "로딩 중...",
+    "noData": "데이터가 없습니다",
+    "error": "오류가 발생했습니다",
+    "success": "성공했습니다",
+    "confirmDelete": "정말 삭제하시겠습니까?",
+    "confirmPublish": "이 뉴스를 발행하시겠습니까?"
+  }
+}
