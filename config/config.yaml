@@ -1,6 +1,8 @@
 app:
   version_check_url: "https://raw.githubusercontent.com/sansan0/TrendRadar/refs/heads/master/version"
   show_version_update: true # 控制显示版本更新提示，如果 false，则不接受新版本提示
+  default_language: "zh" # 默认语言: zh(中文), ko(한국어), en(English)
+  available_languages: ["zh", "ko", "en"] # 可用语言列表
 
 crawler:
   request_interval: 1000 # 请求间隔(毫秒)
