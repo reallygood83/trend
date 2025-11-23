@@ -55,16 +55,16 @@ SMTP_CONFIGS = {
 
 # === 配置管理 ===
 def load_config():
-    """加载配置文件"""
+    """구성 파일 로드"""
     config_path = os.environ.get("CONFIG_PATH", "config/config.yaml")
 
     if not Path(config_path).exists():
-        raise FileNotFoundError(f"配置文件 {config_path} 不存在")
+        raise FileNotFoundError(f"구성 파일 {config_path}을(를) 찾을 수 없습니다")
 
     with open(config_path, "r", encoding="utf-8") as f:
         config_data = yaml.safe_load(f)
 
-    print(f"配置文件加载成功: {config_path}")
+    print(f"구성 파일 로드 완료: {config_path}")
 
     # 构建配置
     config = {
@@ -218,17 +218,17 @@ def load_config():
         notification_sources.append(f"ntfy({server_source})")
 
     if notification_sources:
-        print(f"通知渠道配置来源: {', '.join(notification_sources)}")
+        print(f"알림 채널 구성 출처: {', '.join(notification_sources)}")
     else:
-        print("未配置任何通知渠道")
+        print("알림 채널이 구성되지 않았습니다")
 
     return config
 
 
-print("正在加载配置...")
+print("구성 로드 중...")
 CONFIG = load_config()
-print(f"TrendRadar v{VERSION} 配置加载完成")
-print(f"监控平台数量: {len(CONFIG['PLATFORMS'])}")
+print(f"TrendRadar v{VERSION} 구성 로드 완료")
+print(f"모니터링 플랫폼 수: {len(CONFIG['PLATFORMS'])}")
 
 
 # === 工具函数 ===
@@ -291,7 +291,7 @@ def check_version_update(
         response.raise_for_status()
 
         remote_version = response.text.strip()
-        print(f"当前版本: {current_version}, 远程版本: {remote_version}")
+        print(f"현재 버전: {current_version}, 원격 버전: {remote_version}")
 
         # 比较版本
         def parse_version(version_str):
@@ -310,7 +310,7 @@ def check_version_update(
         return need_update, remote_version if need_update else None
 
     except Exception as e:
-        print(f"版本检查失败: {e}")
+        print(f"버전 확인 실패: {e}")
         return False, None
 
 
@@ -371,9 +371,9 @@ class PushRecordManager:
 
                 if (current_time - file_date).days > retention_days:
                     record_file.unlink()
-                    print(f"清理过期推送记录: {record_file.name}")
+                    print(f"만료된 푸시 기록 정리: {record_file.name}")
             except Exception as e:
-                print(f"清理记录文件失败 {record_file}: {e}")
+                print(f"기록 파일 정리 실패 {record_file}: {e}")
 
     def has_pushed_today(self) -> bool:
         """检查今天是否已经推送过"""
@@ -387,7 +387,7 @@ class PushRecordManager:
                 record = json.load(f)
             return record.get("pushed", False)
         except Exception as e:
-            print(f"读取推送记录失败: {e}")
+            print(f"푸시 기록 읽기 실패: {e}")
             return False
 
     def record_push(self, report_type: str):
@@ -404,9 +404,9 @@ class PushRecordManager:
         try:
             with open(record_file, "w", encoding="utf-8") as f:
                 json.dump(record, f, ensure_ascii=False, indent=2)
-            print(f"推送记录已保存: {report_type} at {now.strftime('%H:%M:%S')}")
+            print(f"푸시 기록 저장됨: {report_type} at {now.strftime('%H:%M:%S')}")
         except Exception as e:
-            print(f"保存推送记录失败: {e}")
+            print(f"푸시 기록 저장 실패: {e}")
 
     def is_in_time_range(self, start_time: str, end_time: str) -> bool:
         """检查当前时间是否在指定时间范围内"""
@@ -494,7 +494,7 @@ class DataFetcher:
                     raise ValueError(f"响应状态异常: {status}")
 
                 status_info = "最新数据" if status == "success" else "缓存数据"
-                print(f"获取 {id_value} 成功（{status_info}）")
+                print(f"{id_value} 가져오기 성공 ({status_info})")
                 return data_text, id_value, alias
 
             except Exception as e:
@@ -503,10 +503,10 @@ class DataFetcher:
                     base_wait = random.uniform(min_retry_wait, max_retry_wait)
                     additional_wait = (retries - 1) * random.uniform(1, 2)
                     wait_time = base_wait + additional_wait
-                    print(f"请求 {id_value} 失败: {e}. {wait_time:.2f}秒后重试...")
+                    print(f"{id_value} 요청 실패: {e}. {wait_time:.2f}초 후 재시도...")
                     time.sleep(wait_time)
                 else:
-                    print(f"请求 {id_value} 失败: {e}")
+                    print(f"{id_value} 요청 실패: {e}")
                     return None, id_value, alias
         return None, id_value, alias
 
@@ -552,10 +552,10 @@ class DataFetcher:
                                 "mobileUrl": mobile_url,
                             }
                 except json.JSONDecodeError:
-                    print(f"解析 {id_value} 响应失败")
+                    print(f"{id_value} 응답 파싱 실패")
                     failed_ids.append(id_value)
                 except Exception as e:
-                    print(f"处理 {id_value} 数据出错: {e}")
+                    print(f"{id_value} 데이터 처리 오류: {e}")
                     failed_ids.append(id_value)
             else:
                 failed_ids.append(id_value)
@@ -565,7 +565,7 @@ class DataFetcher:
                 actual_interval = max(50, actual_interval)
                 time.sleep(actual_interval / 1000)
 
-        print(f"成功: {list(results.keys())}, 失败: {failed_ids}")
+        print(f"성공: {list(results.keys())}, 실패: {failed_ids}")
         return results, id_to_name, failed_ids
 
 
@@ -1077,7 +1077,7 @@ def count_word_frequency(
 
     # 如果没有配置词组，创建一个包含所有新闻的虚拟词组
     if not word_groups:
-        print("频率词配置为空，将显示所有新闻")
+        print("빈도 단어 구성이 비어 있습니다. 모든 뉴스를 표시합니다")
         word_groups = [{"required": [], "normal": [], "group_key": "全部新闻"}]
         filter_words = []  # 清空过滤词，显示所有新闻
 
@@ -1136,7 +1136,7 @@ def count_word_frequency(
             if len(word_groups) == 1 and word_groups[0]["group_key"] == "全部新闻"
             else "频率词过滤"
         )
-        print(f"当日汇总模式：处理 {total_input_news} 条新闻，模式：{filter_status}")
+        print(f"당일 요약 모드: {total_input_news}건 뉴스 처리, 모드: {filter_status}")
 
     word_stats = {}
     total_titles = 0
@@ -1315,9 +1315,9 @@ def count_word_frequency(
                     f"增量模式：{total_new_count} 条新增新闻中，有 {matched_new_count} 条{filter_status}"
                 )
                 if matched_new_count == 0 and len(word_groups) > 1:
-                    print("增量模式：没有新增新闻匹配频率词，将不会发送通知")
+                    print("증분 모드: 빈도 단어와 일치하는 신규 뉴스가 없습니다. 알림을 보내지 않습니다")
             else:
-                print("增量模式：未检测到新增新闻")
+                print("증분 모드: 신규 뉴스가 감지되지 않았습니다")
     elif mode == "current":
         total_input_news = sum(len(titles) for titles in results_to_process.values())
         if is_first_today:
@@ -1707,7 +1707,7 @@ def render_html_content(
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>热点新闻分析</title>
+        <title>주요 뉴스 분석</title>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js" integrity="sha512-BNaRQnYJYiPSqHHDb58B0yaPfCu+Wgds8Gp/gU33kqBtgNS4tSPHuGibyoeqMV/TJlSKda6FXzoEyYGjTe+vXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <style>
             * { box-sizing: border-box; }
@@ -2136,49 +2136,49 @@ def render_html_content(
         <div class="container">
             <div class="header">
                 <div class="save-buttons">
-                    <button class="save-btn" onclick="saveAsImage()">保存为图片</button>
-                    <button class="save-btn" onclick="saveAsMultipleImages()">分段保存</button>
+                    <button class="save-btn" onclick="saveAsImage()">이미지로 저장</button>
+                    <button class="save-btn" onclick="saveAsMultipleImages()">분할 저장</button>
                 </div>
-                <div class="header-title">热点新闻分析</div>
+                <div class="header-title">주요 뉴스 분석</div>
                 <div class="header-info">
                     <div class="info-item">
-                        <span class="info-label">报告类型</span>
+                        <span class="info-label">보고서 유형</span>
                         <span class="info-value">"""
 
-    # 处理报告类型显示
+    # 처리 보고서 유형 표시
     if is_daily_summary:
         if mode == "current":
-            html += "当前榜单"
+            html += "현재 순위"
         elif mode == "incremental":
-            html += "增量模式"
+            html += "증분 모드"
         else:
-            html += "当日汇总"
+            html += "당일 요약"
     else:
-        html += "实时分析"
+        html += "실시간 분석"
 
     html += """</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">新闻总数</span>
+                        <span class="info-label">뉴스 총계</span>
                         <span class="info-value">"""
 
-    html += f"{total_titles} 条"
+    html += f"{total_titles} 건"
 
-    # 计算筛选后的热点新闻数量
+    # 필터링된 주요 뉴스 수 계산
     hot_news_count = sum(len(stat["titles"]) for stat in report_data["stats"])
 
     html += """</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">热点新闻</span>
+                        <span class="info-label">주요 뉴스</span>
                         <span class="info-value">"""
 
-    html += f"{hot_news_count} 条"
+    html += f"{hot_news_count} 건"
 
     html += """</span>
                     </div>
                     <div class="info-item">
-                        <span class="info-label">生成时间</span>
+                        <span class="info-label">생성 시간</span>
                         <span class="info-value">"""
 
     now = get_beijing_time()
@@ -2195,7 +2195,7 @@ def render_html_content(
     if report_data["failed_ids"]:
         html += """
                 <div class="error-section">
-                    <div class="error-title">⚠️ 请求失败的平台</div>
+                    <div class="error-title">⚠️ 요청 실패한 플랫폼</div>
                     <ul class="error-list">"""
         for id_value in report_data["failed_ids"]:
             html += f'<li class="error-item">{html_escape(id_value)}</li>'
@@ -2225,7 +2225,7 @@ def render_html_content(
                     <div class="word-header">
                         <div class="word-info">
                             <div class="word-name">{escaped_word}</div>
-                            <div class="word-count {count_class}">{count} 条</div>
+                            <div class="word-count {count_class}">{count} 건</div>
                         </div>
                         <div class="word-index">{i}/{total_count}</div>
                     </div>"""
@@ -2308,7 +2308,7 @@ def render_html_content(
     if report_data["new_titles"]:
         html += f"""
                 <div class="new-section">
-                    <div class="new-section-title">本次新增热点 (共 {report_data['total_new_count']} 条)</div>"""
+                    <div class="new-section-title">이번 신규 주요 뉴스 (총 {report_data['total_new_count']} 건)</div>"""
 
         for source_data in report_data["new_titles"]:
             escaped_source = html_escape(source_data["source_name"])
@@ -2371,16 +2371,16 @@ def render_html_content(
             
             <div class="footer">
                 <div class="footer-content">
-                    由 <span class="project-name">TrendRadar</span> 生成 · 
+                    <span class="project-name">TrendRadar</span>로 생성 ·
                     <a href="https://github.com/sansan0/TrendRadar" target="_blank" class="footer-link">
-                        GitHub 开源项目
+                        GitHub 오픈소스 프로젝트
                     </a>"""
 
     if update_info:
         html += f"""
                     <br>
                     <span style="color: #ea580c; font-weight: 500;">
-                        发现新版本 {update_info['remote_version']}，当前版本 {update_info['current_version']}
+                        새 버전 {update_info['remote_version']} 발견, 현재 버전 {update_info['current_version']}
                     </span>"""
 
     html += """
@@ -2394,7 +2394,7 @@ def render_html_content(
                 const originalText = button.textContent;
                 
                 try {
-                    button.textContent = '生成中...';
+                    button.textContent = '생성 중...';
                     button.disabled = true;
                     window.scrollTo(0, 0);
                     
@@ -2433,7 +2433,7 @@ def render_html_content(
                     
                     const link = document.createElement('a');
                     const now = new Date();
-                    const filename = `TrendRadar_热点新闻分析_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}.png`;
+                    const filename = `TrendRadar_주요뉴스분석_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}.png`;
                     
                     link.download = filename;
                     link.href = canvas.toDataURL('image/png', 1.0);
@@ -2443,16 +2443,16 @@ def render_html_content(
                     link.click();
                     document.body.removeChild(link);
                     
-                    button.textContent = '保存成功!';
+                    button.textContent = '저장 성공!';
                     setTimeout(() => {
                         button.textContent = originalText;
                         button.disabled = false;
                     }, 2000);
-                    
+
                 } catch (error) {
                     const buttons = document.querySelector('.save-buttons');
                     buttons.style.visibility = 'visible';
-                    button.textContent = '保存失败';
+                    button.textContent = '저장 실패';
                     setTimeout(() => {
                         button.textContent = originalText;
                         button.disabled = false;
@@ -2468,7 +2468,7 @@ def render_html_content(
                 const maxHeight = 5000 / scale;
                 
                 try {
-                    button.textContent = '分析中...';
+                    button.textContent = '분석 중...';
                     button.disabled = true;
                     
                     // 获取所有可能的分割元素
@@ -2594,7 +2594,7 @@ def render_html_content(
                         segments.push(currentSegment);
                     }
                     
-                    button.textContent = `生成中 (0/${segments.length})...`;
+                    button.textContent = `생성 중 (0/${segments.length})...`;
                     
                     // 隐藏保存按钮
                     const buttons = document.querySelector('.save-buttons');
@@ -2604,7 +2604,7 @@ def render_html_content(
                     const images = [];
                     for (let i = 0; i < segments.length; i++) {
                         const segment = segments[i];
-                        button.textContent = `生成中 (${i + 1}/${segments.length})...`;
+                        button.textContent = `생성 중 (${i + 1}/${segments.length})...`;
                         
                         // 创建临时容器用于截图
                         const tempContainer = document.createElement('div');
@@ -2659,7 +2659,7 @@ def render_html_content(
                     
                     // 下载所有图片
                     const now = new Date();
-                    const baseFilename = `TrendRadar_热点新闻分析_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
+                    const baseFilename = `TrendRadar_주요뉴스분석_${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}_${String(now.getHours()).padStart(2, '0')}${String(now.getMinutes()).padStart(2, '0')}`;
                     
                     for (let i = 0; i < images.length; i++) {
                         const link = document.createElement('a');
@@ -2673,17 +2673,17 @@ def render_html_content(
                         await new Promise(resolve => setTimeout(resolve, 100));
                     }
                     
-                    button.textContent = `已保存 ${segments.length} 张图片!`;
+                    button.textContent = `${segments.length}개 이미지 저장 완료!`;
                     setTimeout(() => {
                         button.textContent = originalText;
                         button.disabled = false;
                     }, 2000);
-                    
+
                 } catch (error) {
-                    console.error('分段保存失败:', error);
+                    console.error('분할 저장 실패:', error);
                     const buttons = document.querySelector('.save-buttons');
                     buttons.style.visibility = 'visible';
-                    button.textContent = '保存失败';
+                    button.textContent = '저장 실패';
                     setTimeout(() => {
                         button.textContent = originalText;
                         button.disabled = false;
@@ -2742,22 +2742,22 @@ def render_feishu_content(
         if mode == "incremental":
             mode_text = "增量模式下暂无新增匹配的热点词汇"
         elif mode == "current":
-            mode_text = "当前榜单模式下暂无匹配的热点词汇"
+            mode_text = "현재 순위 모드에서 일치하는 주요 단어가 없습니다"
         else:
-            mode_text = "暂无匹配的热点词汇"
+            mode_text = "일치하는 주요 단어가 없습니다"
         text_content = f"📭 {mode_text}\n\n"
 
     if report_data["new_titles"]:
-        if text_content and "暂无匹配" not in text_content:
+        if text_content and "일치 항목 없음" not in text_content:
             text_content += f"\n{CONFIG['FEISHU_MESSAGE_SEPARATOR']}\n\n"
 
         text_content += (
-            f"🆕 **本次新增热点新闻** (共 {report_data['total_new_count']} 条)\n\n"
+            f"🆕 **이번 신규 주요 뉴스** (총 {report_data['total_new_count']} 건)\n\n"
         )
 
         for source_data in report_data["new_titles"]:
             text_content += (
-                f"**{source_data['source_name']}** ({len(source_data['titles'])} 条):\n"
+                f"**{source_data['source_name']}** ({len(source_data['titles'])} 건):\n"
             )
 
             for j, title_data in enumerate(source_data["titles"], 1):
@@ -2771,7 +2771,7 @@ def render_feishu_content(
             text_content += "\n"
 
     if report_data["failed_ids"]:
-        if text_content and "暂无匹配" not in text_content:
+        if text_content and "일치 항목 없음" not in text_content:
             text_content += f"\n{CONFIG['FEISHU_MESSAGE_SEPARATOR']}\n\n"
 
         text_content += "⚠️ **数据获取失败的平台：**\n\n"
@@ -2840,21 +2840,21 @@ def render_dingtalk_content(
         if mode == "incremental":
             mode_text = "增量模式下暂无新增匹配的热点词汇"
         elif mode == "current":
-            mode_text = "当前榜单模式下暂无匹配的热点词汇"
+            mode_text = "현재 순위 모드에서 일치하는 주요 단어가 없습니다"
         else:
-            mode_text = "暂无匹配的热点词汇"
+            mode_text = "일치하는 주요 단어가 없습니다"
         text_content += f"📭 {mode_text}\n\n"
 
     if report_data["new_titles"]:
-        if text_content and "暂无匹配" not in text_content:
+        if text_content and "일치 항목 없음" not in text_content:
             text_content += f"\n---\n\n"
 
         text_content += (
-            f"🆕 **本次新增热点新闻** (共 {report_data['total_new_count']} 条)\n\n"
+            f"🆕 **이번 신규 주요 뉴스** (총 {report_data['total_new_count']} 건)\n\n"
         )
 
         for source_data in report_data["new_titles"]:
-            text_content += f"**{source_data['source_name']}** ({len(source_data['titles'])} 条):\n\n"
+            text_content += f"**{source_data['source_name']}** ({len(source_data['titles'])} 건):\n\n"
 
             for j, title_data in enumerate(source_data["titles"], 1):
                 title_data_copy = title_data.copy()
@@ -2867,7 +2867,7 @@ def render_dingtalk_content(
             text_content += "\n"
 
     if report_data["failed_ids"]:
-        if text_content and "暂无匹配" not in text_content:
+        if text_content and "일치 항목 없음" not in text_content:
             text_content += f"\n---\n\n"
 
         text_content += "⚠️ **数据获取失败的平台：**\n\n"
@@ -2968,9 +2968,9 @@ def split_content_into_batches(
         if mode == "incremental":
             mode_text = "增量模式下暂无新增匹配的热点词汇"
         elif mode == "current":
-            mode_text = "当前榜单模式下暂无匹配的热点词汇"
+            mode_text = "현재 순위 모드에서 일치하는 주요 단어가 없습니다"
         else:
-            mode_text = "暂无匹配的热点词汇"
+            mode_text = "일치하는 주요 단어가 없습니다"
         simple_content = f"📭 {mode_text}\n\n"
         final_content = base_header + simple_content + base_footer
         batches.append(final_content)
@@ -3168,17 +3168,17 @@ def split_content_into_batches(
     if report_data["new_titles"]:
         new_header = ""
         if format_type == "wework":
-            new_header = f"\n\n\n\n🆕 **本次新增热点新闻** (共 {report_data['total_new_count']} 条)\n\n"
+            new_header = f"\n\n\n\n🆕 **이번 신규 주요 뉴스** (총 {report_data['total_new_count']} 건)\n\n"
         elif format_type == "telegram":
             new_header = (
-                f"\n\n🆕 本次新增热点新闻 (共 {report_data['total_new_count']} 条)\n\n"
+                f"\n\n🆕 이번 신규 주요 뉴스 (총 {report_data['total_new_count']} 건)\n\n"
             )
         elif format_type == "ntfy":
-            new_header = f"\n\n🆕 **本次新增热点新闻** (共 {report_data['total_new_count']} 条)\n\n"
+            new_header = f"\n\n🆕 **이번 신규 주요 뉴스** (총 {report_data['total_new_count']} 건)\n\n"
         elif format_type == "feishu":
-            new_header = f"\n{CONFIG['FEISHU_MESSAGE_SEPARATOR']}\n\n🆕 **本次新增热点新闻** (共 {report_data['total_new_count']} 条)\n\n"
+            new_header = f"\n{CONFIG['FEISHU_MESSAGE_SEPARATOR']}\n\n🆕 **이번 신규 주요 뉴스** (총 {report_data['total_new_count']} 건)\n\n"
         elif format_type == "dingtalk":
-            new_header = f"\n---\n\n🆕 **本次新增热点新闻** (共 {report_data['total_new_count']} 条)\n\n"
+            new_header = f"\n---\n\n🆕 **이번 신규 주요 뉴스** (총 {report_data['total_new_count']} 건)\n\n"
 
         test_content = current_batch + new_header
         if (
@@ -3197,15 +3197,15 @@ def split_content_into_batches(
         for source_data in report_data["new_titles"]:
             source_header = ""
             if format_type == "wework":
-                source_header = f"**{source_data['source_name']}** ({len(source_data['titles'])} 条):\n\n"
+                source_header = f"**{source_data['source_name']}** ({len(source_data['titles'])} 건):\n\n"
             elif format_type == "telegram":
-                source_header = f"{source_data['source_name']} ({len(source_data['titles'])} 条):\n\n"
+                source_header = f"{source_data['source_name']} ({len(source_data['titles'])} 건):\n\n"
             elif format_type == "ntfy":
-                source_header = f"**{source_data['source_name']}** ({len(source_data['titles'])} 条):\n\n"
+                source_header = f"**{source_data['source_name']}** ({len(source_data['titles'])} 건):\n\n"
             elif format_type == "feishu":
-                source_header = f"**{source_data['source_name']}** ({len(source_data['titles'])} 条):\n\n"
+                source_header = f"**{source_data['source_name']}** ({len(source_data['titles'])} 건):\n\n"
             elif format_type == "dingtalk":
-                source_header = f"**{source_data['source_name']}** ({len(source_data['titles'])} 条):\n\n"
+                source_header = f"**{source_data['source_name']}** ({len(source_data['titles'])} 건):\n\n"
 
             # 构建第一条新增新闻
             first_news_line = ""
